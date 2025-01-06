@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, minimum-scale=1"
+    />
+    <title>Test Firefox Memory Leaks</title>
+  </head>
+  <body>
+    <h1>Test Firefox Memory Leaks</h1>
+    <ol>
+      <li>
+        You must allow this web page to openning new tabs and popups, because it
+        will open a lot of them!
+      </li>
+      <li>You can open Firefox's built-in Task Manager to see memory usage.</li>
+      <li>
+        Clicking the button may crash your system. Save your important work
+        before trying.
+      </li>
+      <li>Then click the following button :-)</li>
+    </ol>
+    <button>Don't Click Before Reading Above Messages!</button>
+    <script>
+      const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+
+      function open(url, id) {
+        return new Promise((resolve, reject) => {
+          const handle = window.open(url, id);
+          const interval = setInterval(() => {
+            if (handle.closed) {
+              clearInterval(interval);
+              resolve(null);
+            }
+          }, 100);
+        });
+      }
+
+      (async () => {
+        while (true) {
+            await open('page.html');
+        }
+      })();
+    </script>
+  </body>
+</html>
